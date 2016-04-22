@@ -2,6 +2,7 @@
 
 import os
 import glob
+import shutil
 from guessit import guessit
 
 # directory_to_sort = '/Volumes/Xanadu-Plex/Old'
@@ -34,7 +35,9 @@ class Sorter(object):
 		if not os.path.exists(subdirectory):
 			os.makedirs(subdirectory)
 	def move_file(self, unsorted_file, destination_subdirectory):
-		pass
+		file_name = os.path.basename(unsorted_file)
+		final_destination = os.path.join(destination_subdirectory, file_name)
+		shutil.move(unsorted_file, final_destination)
 	def sort(self, unsorted_files):
 		# first create Movies and Television subdirectories if they don't exist
 		movies_destination = self.get_movies_directory()
@@ -43,18 +46,12 @@ class Sorter(object):
 		self.create_subdirectories_if_necessary(tv_destination)
 		for video_file in unsorted_files:
 			video_guess = guessit(video_file)
-			# print '++++++++++++++'
-			# print video_file
-			# print video_guess
-			# print video_guess['type']
 			if video_guess['type'] == 'movie':
 				# move to movies
-				print 'movie'
-				pass
+				self.move_file(video_file, movies_destination)
 			elif video_guess['type'] == 'episode':
 				# move to tv
-				print 'tv'
-				pass
+				self.move_file(video_file, tv_destination)
 			else:
 				print '--------------------------'
 				print 'Unknown type encountered'
@@ -65,7 +62,7 @@ class Sorter(object):
 		
 
 def main():
-	print "main"
+	print "Sorting media ..."
 	collector = MediaFileCollector(directory_to_sort)
 	sorter = Sorter(destination_directory)
 	sorter.sort(collector.all_files())
