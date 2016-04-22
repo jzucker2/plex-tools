@@ -1,18 +1,23 @@
 #!/usr/bin/env python
 
 import os
+import glob
 from guessit import guessit
 
-directory_to_sort = '/Volumes/Xanadu-Plex/Old'
-destination_directory = '/Volumes/Xanadu-Plex'
+# directory_to_sort = '/Volumes/Xanadu-Plex/Old'
+# destination_directory = '/Volumes/Xanadu-Plex'
+directory_to_sort = '/Users/jzucker/Desktop/test-plex-unsorted'
+destination_directory = '/Users/jzucker/Desktop/test-plex-sorted'
 
 class MediaFileCollector(object):
 	"""docstring for MediaFileCollector"""
 	def __init__(self, sorting_directory):
 		super(MediaFileCollector, self).__init__()
 		self.sorting_directory = sorting_directory
+	def glob_file_pathname(self):
+		return os.path.join(self.sorting_directory, "*.mp4")
 	def all_files(self):
-		return []
+		return glob.glob(self.glob_file_pathname())
 
 # automatically sorts movies into self.destination/Movies
 # and tv shows into self.destination/Television
@@ -21,12 +26,40 @@ class Sorter(object):
 	def __init__(self, destination):
 		super(Sorter, self).__init__()
 		self.destination = destination
-	def get_television_subdirectory(self):
-		return "blah"
-	def get_movies_subdirectory(self):
-		return "blah"
-	def sort(self, unsorted_files):
+	def get_television_directory(self):
+		return os.path.join(self.destination, "Television")
+	def get_movies_directory(self):
+		return os.path.join(self.destination, "Movies")
+	def create_subdirectories_if_necessary(self, subdirectory):
+		if not os.path.exists(subdirectory):
+			os.makedirs(subdirectory)
+	def move_file(self, unsorted_file, destination_subdirectory):
 		pass
+	def sort(self, unsorted_files):
+		# first create Movies and Television subdirectories if they don't exist
+		movies_destination = self.get_movies_directory()
+		tv_destination = self.get_television_directory()
+		self.create_subdirectories_if_necessary(movies_destination)
+		self.create_subdirectories_if_necessary(tv_destination)
+		for video_file in unsorted_files:
+			video_guess = guessit(video_file)
+			# print '++++++++++++++'
+			# print video_file
+			# print video_guess
+			# print video_guess['type']
+			if video_guess['type'] == 'movie':
+				# move to movies
+				print 'movie'
+				pass
+			elif video_guess['type'] == 'episode':
+				# move to tv
+				print 'tv'
+				pass
+			else:
+				print '--------------------------'
+				print 'Unknown type encountered'
+				print video_guess
+				print '--------------------------'
 
 		
 		
@@ -34,6 +67,9 @@ class Sorter(object):
 def main():
 	print "main"
 	collector = MediaFileCollector(directory_to_sort)
+	sorter = Sorter(destination_directory)
+	sorter.sort(collector.all_files())
+	
 
 
 if __name__ == "__main__":
