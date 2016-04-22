@@ -7,8 +7,8 @@ from guessit import guessit
 
 # directory_to_sort = '/Volumes/Xanadu-Plex/Old'
 # destination_directory = '/Volumes/Xanadu-Plex'
-directory_to_sort = '/Users/jzucker/Desktop/test-plex-unsorted'
-destination_directory = '/Users/jzucker/Desktop/test-plex-sorted'
+directory_to_sort = '/Volumes/Xanadu-Plex/Old'
+destination_directory = '/Volumes/Xanadu-Plex'
 
 class MediaFileCollector(object):
 	"""docstring for MediaFileCollector"""
