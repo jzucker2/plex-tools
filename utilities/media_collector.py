@@ -15,5 +15,16 @@ class MediaFileCollector(object):
 		self.sorting_directory = sorting_directory
 	def glob_file_pathname(self):
 		return os.path.join(self.sorting_directory, "*.mp4")
+	def glob_other_file_pathname(self):
+		return os.path.join(self.sorting_directory, "*.mkv")
+	def glob_other_other_file_pathname(self):
+		return os.path.join(self.sorting_directory, "*.m4v")
+	def glob_lame_file_pathname(self):
+		return os.path.join(self.sorting_directory, "*.avi")
 	def all_files(self):
-		return glob.glob(self.glob_file_pathname())
+		everything = []
+		everything.extend(glob.glob(self.glob_file_pathname()))
+		everything.extend(glob.glob(self.glob_other_file_pathname()))
+		everything.extend(glob.glob(self.glob_other_other_file_pathname()))
+		everything.extend(glob.glob(self.glob_lame_file_pathname()))
+		return everything
